@@ -535,8 +535,9 @@ class Trainer(object):
             save_model_secs=60 * 60,
             save_summaries_secs=120,
             saver=saver)
-
+        
         logging.info("%s: Starting managed session.", task_as_string(self.task))
+        bingxuan = time.time()
         with sv.managed_session(target, config=self.config) as sess:
             if len(FLAGS.pretrain_model_path) > 0:
                 print("load pretrain model weights from: ", FLAGS.pretrain_model_path)
@@ -546,7 +547,7 @@ class Trainer(object):
                 sess.run(initial_global_step)
             try:
                 logging.info("%s: Entering training loop.", task_as_string(self.task))
-                bingxuan = time.time()
+            
                 while (not sv.should_stop()) and (not self.max_steps_reached):
                     batch_start_time = time.time()
                     _, global_step_val, loss_val, predictions_val, labels_val = sess.run(
@@ -597,12 +598,12 @@ class Trainer(object):
                         logging.info("training step " + str(global_step_val) + " | Loss: " +
                                      ("%.2f" % loss_val) + " Examples/sec: " +
                                      ("%.2f" % examples_per_second))
-                print(time.time()-bingxuan)
-                print("maybe training time")
+        
             except tf.errors.OutOfRangeError:
                 logging.info("%s: Done training -- epoch limit reached.",
                              task_as_string(self.task))
                 sv.saver.save(sess, sv.save_path, global_step_val)
+        logging.info("%.2f" % time.time()-bingxuan)
         logging.info("%s: Exited training loop.", task_as_string(self.task))
         sv.Stop()
 
