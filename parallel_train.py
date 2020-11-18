@@ -546,6 +546,7 @@ class Trainer(object):
                 sess.run(initial_global_step)
             try:
                 logging.info("%s: Entering training loop.", task_as_string(self.task))
+                bingxuan = time.time()
                 while (not sv.should_stop()) and (not self.max_steps_reached):
                     batch_start_time = time.time()
                     _, global_step_val, loss_val, predictions_val, labels_val = sess.run(
@@ -596,6 +597,8 @@ class Trainer(object):
                         logging.info("training step " + str(global_step_val) + " | Loss: " +
                                      ("%.2f" % loss_val) + " Examples/sec: " +
                                      ("%.2f" % examples_per_second))
+                print(time.time()-bingxuan)
+                print("maybe training time")
             except tf.errors.OutOfRangeError:
                 logging.info("%s: Done training -- epoch limit reached.",
                              task_as_string(self.task))
