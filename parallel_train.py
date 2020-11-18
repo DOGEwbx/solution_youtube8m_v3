@@ -603,7 +603,7 @@ class Trainer(object):
                 logging.info("%s: Done training -- epoch limit reached.",
                              task_as_string(self.task))
                 sv.saver.save(sess, sv.save_path, global_step_val)
-        logging.info("%.2f" % time.time()-bingxuan)
+        logging.info("%.2f" % (time.time()-bingxuan))
         logging.info("%s: Exited training loop.", task_as_string(self.task))
         sv.Stop()
 
